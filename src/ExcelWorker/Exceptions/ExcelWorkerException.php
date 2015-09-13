@@ -1,4 +1,4 @@
-<?php namespace ExcelWorker;
+<?php namespace ExcelWorker\Exception;
 
 use Exception;
 
@@ -11,6 +11,7 @@ const FAIL_TO_READ          = 22;
 const WRONG_ROW             = 30;
 const WRONG_COLUMN          = 31;
 const WRONG_CELL            = 32;
+const EMPTY_FILE            = 40;
 
 /**
  * Class ExcelWorkerException
