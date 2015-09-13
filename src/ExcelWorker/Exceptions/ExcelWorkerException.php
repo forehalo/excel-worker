@@ -1,17 +1,6 @@
 <?php namespace ExcelWorker\Exception;
 
-use Exception;
-
-const FILE_NOT_FOUND        = 10;
-const PATH_NOT_FOUND        = 11;
-const WRONG_EXTENSION       = 12;
-const FAIL_TO_OPEN          = 20;
-const FAIL_TO_WRITE         = 21;
-const FAIL_TO_READ          = 22;
-const WRONG_ROW             = 30;
-const WRONG_COLUMN          = 31;
-const WRONG_CELL            = 32;
-const EMPTY_FILE            = 40;
+use PHPExcel_Exception;
 
 /**
  * Class ExcelWorkerException
@@ -21,24 +10,7 @@ const EMPTY_FILE            = 40;
  * @author      forehalo <forehalo@gmail.com>
  * @license     http://www.gnu.org/licenses/lgpl.html   LGPL
  */
-class ExcelWorkerException extends Exception
+class ExcelWorkerException extends PHPExcel_Exception
 {
-    /**
-     * Exception handler.
-     *
-     * @param $code
-     * @param $message
-     * @param $file
-     * @param $line
-     * @throws Exception
-     */
-    public function ExceptionHandler($code, $message, $file, $line)
-    {
-        $e = new self($message, $code);
-        $e->line = $line;
-        $e->file = $file;
-        throw $e;
-    }
-
 
 }

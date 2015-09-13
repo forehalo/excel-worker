@@ -1,4 +1,7 @@
 <?php namespace ExcelWorker;
+
+use PHPExcel;
+
 /**
  * Class ExcelWorker.php
  * @package     forehalo/excel-worker
@@ -9,5 +12,9 @@
  */
 class ExcelWorker
 {
-
+    private $excel;
+    public function __construct()
+    {
+        $this->excel = new PHPExcel();
+    }
 }

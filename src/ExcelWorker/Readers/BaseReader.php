@@ -49,10 +49,6 @@ abstract class BaseReader implements IReader
      */
     public function __construct($file = null)
     {
-        if (isset($file)) {
-            $this->file = $file;
-            $this->load($file);
-        }
     }
 
     /**
@@ -63,10 +59,6 @@ abstract class BaseReader implements IReader
      */
     public function get()
     {
-        if ($this->content == []) {
-            throw new ExcelWorkerException('No content in this file', EMPTY_FILE);
-        }
-        return $this->content;
     }
 
     /**
@@ -78,10 +70,6 @@ abstract class BaseReader implements IReader
      */
     public function getRow($row)
     {
-        if (!$this->rowExist($row - 1)) {
-            throw new ExcelWorkerException('Wrong row number', WRONG_ROW);
-        }
-        return $this->content[$row - 1];
     }
 
     /**
@@ -91,7 +79,6 @@ abstract class BaseReader implements IReader
      */
     public function getFirst()
     {
-        $this->getRow(1);
     }
 
     /**
@@ -103,10 +90,6 @@ abstract class BaseReader implements IReader
      */
     public function getColumn($col)
     {
-        if (!$this->columnExist($col - 1)) {
-            throw new ExcelWorkerException('Wrong column number', WRONG_COLUMN);
-        }
-        return array_column($this->content, $col - 1);
     }
 
     /**
@@ -119,10 +102,6 @@ abstract class BaseReader implements IReader
      */
     public function getCell($row, $col)
     {
-        if (!$this->cellExist($row, $col)) {
-            throw new ExcelWorkerException('Wrong cell index', WRONG_CELL);
-        }
-        return $this->content[$row - 1][$col - 1];
     }
 
     /**
@@ -132,8 +111,6 @@ abstract class BaseReader implements IReader
      */
     public function getHeader()
     {
-        if ($this->header != [])
-            return $this->header;
     }
 
     /**
@@ -144,7 +121,6 @@ abstract class BaseReader implements IReader
      */
     public function rowExist($row)
     {
-        return array_key_exists($row, $this->content);
     }
 
     /**
@@ -155,7 +131,6 @@ abstract class BaseReader implements IReader
      */
     public function columnExist($col)
     {
-        return array_key_exists($col, $this->content[0]);
     }
 
     /**
@@ -167,14 +142,9 @@ abstract class BaseReader implements IReader
      */
     public function cellExist($row, $col)
     {
-        return isset($this->content[$row][$col]);
     }
 
     public function canReader()
     {
-        if (!file_exists($this->file) || !is_readable($this->file)) {
-           throw new ExcelWorkerException("File: $this->file is not exist or readable", FAIL_TO_READ);
-        }
-        return true;
     }
 }
