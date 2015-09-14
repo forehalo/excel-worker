@@ -12,28 +12,5 @@ use ExcelWorker\ExcelWorker;
  */
 class Excel
 {
-    private static $excel = null;
-
-    private function __construct()
-    {
-        self::$excel = new ExcelWorker();
-    }
-
-    private static function getInstance(){
-        if (!(self::$excel instanceof ExcelWorker)) {
-            self::$excel = new ExcelWorker();
-        }
-        return self::$excel;
-    }
-
-    public static function create($file)
-    {
-        self::getInstance()->create($file);
-    }
-
-    public static function load($file)
-    {
-        self::getInstance()->load($file);
-        return self::getInstance()->get();
-    }
+    
 }
