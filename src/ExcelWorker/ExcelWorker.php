@@ -1,6 +1,8 @@
 <?php namespace ExcelWorker;
 
-
+use ExcelWorker\Readers\ExcelWorkerReader;
+use ExcelWorker\Writers\ExcelWorkerWriter;
+use PHPExcel;
 /**
  * Class ExcelWorker.php
  * @package     forehalo/excel-worker
@@ -11,4 +13,27 @@
  */
 class ExcelWorker
 {
+    private $excel;
+
+    private $reader;
+
+    private $writer;
+
+    public function __construct(PHPExcel $excel, ExcelWorkerReader $reader, ExcelWorkerWriter $writer)
+    {
+        $this->excel = $excel;
+        $this->reader = $reader;
+        $this->writer = $writer;
+    }
+
+    public function create($file)
+    {
+
+    }
+
+    public function load($file)
+    {
+        $this->reader->injectExcel($this);
+        $this->reader->load($file);
+    }
 }
