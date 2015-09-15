@@ -182,7 +182,7 @@ class ExcelWorkerReader
     /**
      * @return array
      */
-    public function getActiveSheet()
+    public function getSelectedSheets()
     {
         return $this->selectedSheets;
     }
@@ -190,7 +190,7 @@ class ExcelWorkerReader
     /**
      * @param int $Sheets
 */
-    public function setActiveSheet($Sheets)
+    public function setSelectedSheets($Sheets)
     {
         $this->selectedSheets = $Sheets;
     }
@@ -204,6 +204,12 @@ class ExcelWorkerReader
     public function load($file)
     {
         $this->_init($file);
+
+        if ($this->sheetSeleted())
+            $this->reader->setLoadSheetsOnly($this->selectedSheets);
+        $this->excel = $this->reader->load($this->file);
+
+        return $this;
     }
 
     protected function _init($file)
@@ -270,6 +276,11 @@ class ExcelWorkerReader
     private function resetValueBinder()
     {
         PHPExcel_Cell::setValueBinder(new PHPExcel_Cell_DefaultValueBinder());
+    }
+
+    protected function sheetSeleted()
+    {
+        return count($this->selectedSheets) > 0;
     }
 
 
