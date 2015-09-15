@@ -1,6 +1,5 @@
 <?php namespace ExcelWorker;
 
-use PHPExcel;
 
 /**
  * Class ExcelWorker.php
@@ -12,9 +11,4 @@ use PHPExcel;
  */
 class ExcelWorker
 {
-    private $excel;
-    public function __construct()
-    {
-        $this->excel = new PHPExcel();
-    }
 }

@@ -12,5 +12,5 @@ use ExcelWorker\ExcelWorker;
  */
 class Excel
 {
-    
+
 }
