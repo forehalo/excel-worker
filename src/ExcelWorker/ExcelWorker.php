@@ -23,12 +23,17 @@ class ExcelWorker
     {
         $this->excel = new PHPExcel();
         $this->reader = new ExcelWorkerReader();
-        $this->writer = new ExcelWorkerWriter($this->excel);
+        $this->writer = new ExcelWorkerWriter();
     }
 
     public function create($file)
     {
+        $this->writer->injectExcel($this->excel);
 
+        $this->writer->setFilename($file);
+        $this->writer->setTitle($file);
+
+        return $this->writer;
     }
 
     public function load($file)
