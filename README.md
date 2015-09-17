@@ -19,10 +19,10 @@ $worker = new ExcelWorker();
 //Export
 $worker->create('filename')
 	   ->WriterRow([
-	'a',
-	'b',
-	'c'
-])->save('xlsx');  //you may use ->save('xlsx', 'path') to specify the storage path.
+			'a',
+			'b',
+			'c'
+		])->save('xlsx');  //you may use ->save('xlsx', 'path') to specify the storage path.
 
 //Import
 $worker->load('./path/filename.xlsx')->all();
