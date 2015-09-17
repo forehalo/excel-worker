@@ -10,7 +10,7 @@ use PHPExcel;
  * @author      forehalo <forehalo@gmail.com>
  * @license     http://www.gnu.org/licenses/lgpl.html   LGPL
  */
-abstract class ExcelWorkerWriter
+class ExcelWorkerWriter
 {
     protected $path = '../../result/';
 
