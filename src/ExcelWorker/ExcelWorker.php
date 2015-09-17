@@ -13,12 +13,27 @@ use PHPExcel;
  */
 class ExcelWorker
 {
+    /**
+     * PHPExcel object
+     * @var PHPExcel
+     */
     private $excel;
 
+    /**
+     * Reader
+     * @var ExcelWorkerReader
+     */
     private $reader;
 
+    /**
+     * Writer
+     * @var ExcelWorkerWriter
+     */
     private $writer;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->excel = new PHPExcel();
@@ -26,8 +41,14 @@ class ExcelWorker
         $this->writer = new ExcelWorkerWriter();
     }
 
+    /**
+     * Create a new file.
+     * @param $file
+     * @return ExcelWorkerWriter
+     */
     public function create($file)
     {
+        //Inject PHPExcel object into writer
         $this->writer->injectExcel($this->excel);
 
         $this->writer->setFilename($file);
@@ -36,8 +57,14 @@ class ExcelWorker
         return $this->writer;
     }
 
+    /**
+     * Load a exist file.
+     * @param $file
+     * @return ExcelWorkerReader
+     */
     public function load($file)
     {
+        //Inject PHPExcel object into reader
         $this->reader->injectExcel($this->excel);
         $this->reader->load($file);
 
