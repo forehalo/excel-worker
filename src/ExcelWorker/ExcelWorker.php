@@ -19,11 +19,11 @@ class ExcelWorker
 
     private $writer;
 
-    public function __construct(PHPExcel $excel, ExcelWorkerReader $reader, ExcelWorkerWriter $writer)
+    public function __construct()
     {
-        $this->excel = $excel;
-        $this->reader = $reader;
-        $this->writer = $writer;
+        $this->excel = new PHPExcel();
+        $this->reader = new ExcelWorkerReader();
+        $this->writer = new ExcelWorkerWriter($this->excel);
     }
 
     public function create($file)
@@ -33,7 +33,9 @@ class ExcelWorker
 
     public function load($file)
     {
-        $this->reader->injectExcel($this);
+        $this->reader->injectExcel($this->excel);
         $this->reader->load($file);
+
+        return $this->reader;
     }
 }
