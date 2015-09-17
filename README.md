@@ -6,7 +6,7 @@ a simple library to work with excels based on PHPExcel.
 
 require this package in your `composer.json` and update composer. It will also download PHPExcel for you.
 
-	"forehalo/excel-worker":"1.0.0"
+	"forehalo/excel-worker":"1.0.*"
 
 ##Usage
 
@@ -19,10 +19,10 @@ $worker = new ExcelWorker();
 //Export
 $worker->create('filename')
 	   ->WriterRow([
-	'a',
-	'b',
-	'c'
-])->save('xlsx');  //you may use ->save('xlsx', 'path') to specify the storage path.
+			'a',
+			'b',
+			'c'
+		])->save('xlsx');  //you may use ->save('xlsx', 'path') to specify the storage path.
 
 //Import
 $worker->load('./path/filename.xlsx')->all();
@@ -32,7 +32,6 @@ $worker->load('./path/filename.xlsx')->all();
 
 This library is still in developing. More feature will be add in, and bug will be fixed.
 
-Thanks for using.
 
 ##License
 
