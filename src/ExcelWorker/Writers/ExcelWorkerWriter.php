@@ -1,6 +1,8 @@
 <?php namespace ExcelWorker\Writers;
 
+use helper\Helper;
 use PHPExcel;
+use PHPExcel_IOFactory;
 
 /**
  * Class BaseWriter.php
@@ -12,55 +14,111 @@ use PHPExcel;
  */
 class ExcelWorkerWriter
 {
-    protected $path = '../../result/';
+    protected $path;
 
     protected $excel;
 
+    protected $hasHeader;
+
+    private $file;
+
+    private $title;
+
+    private $ext;
+
     protected $writer;
 
-    protected $ext = [
-        'xlsx' => 'Excel2007',
-        'xls' => 'Excel5',
-        'csv' => 'CSV',
-        'html' => 'HTML',
-    ];
+    private $format;
 
-    public function __construct(PHPExcel $excel)
+    public function __construct()
     {
-        $this->excel = $excel;
+        $this->helper = new Helper();
     }
 
     public function writeHeader($header)
     {
-        return self::writeRow(1, $header);
+        return $this->writeRow($header);
     }
 
-    public function writeRow($rowNum = 1, $data = [])
+    public function writeRow($data = [], $rowNum = 1)
     {
         $column = 'A';
 
         foreach ($data as $item) {
             $cell = $column . $rowNum;
-            $this->excel->setActiveSheetIndex(0)
-                ->setCellValue($cell, $item);
+            $this->excel->setActiveSheetIndex(0)->setCellValue($cell, $item);
             $column++;
         }
         return $this;
     }
 
-    public function writeColumn($col = 'A', $data = [], $append = false)
+    public function writeColumn($data = [], $col = 'A')
     {
+        $rowNum = $this->hasHeader ? 2 : 1;
+        foreach ($data as $item) {
+            $cell = $col . $rowNum;
+            $this->excel->setActiveSheetIndex(0)->setCellValue($cell, $item);
+            $rowNum++;
+        }
+        return $this;
     }
 
-    public function save($file = null, $ext = 'xlsx')
+    public function save($ext = 'xlsx', $path = false)
     {
-        $this->writer = \PHPExcel_IOFactory::createWriter($this->excel, $this->ext[$ext]);
-        if (!isset($file)) {
-            if (!is_dir($this->path))
-                mkdir($this->path);
-            $this->writer->save($this->path . date('Y-m-d') . 'xlsx');
-        } else {
-            $this->writer->save($file);
+        $this->setStoragePath($path);
+
+        $this->ext = $ext;
+
+        $file = $this->path . '/' . $this->file . '.' .$this->ext;
+
+        $this->_setFormat();
+        $this->_setWriter();
+
+        $this->writer->save($file);
+    }
+
+    protected function _setFormat()
+    {
+        $this->format = $this->helper->getFormatByExtension($this->ext);
+    }
+
+    protected function _setWriter()
+    {
+        $this->writer = PHPExcel_IOFactory::createWriter($this->excel, $this->format);
+
+        if ($this->format == 'CSV') {
+            $this->writer->setDelimiter(',');
+            $this->writer->setEnclosure('"');
+            $this->writer->setLineEnding("\r\n");
         }
+    }
+
+    public function injectExcel($excel)
+    {
+        $this->excel = $excel;
+    }
+
+    public function setFileName($file)
+    {
+        $this->file = $file;
+    }
+
+    public function setTitle($file)
+    {
+        $this->title = $file;
+        $this->excel->getProperties()->setTitle($this->title);
+    }
+
+    private function setStoragePath($path)
+    {
+        $path = $path ? $path : '../../result';
+
+        $this->path = rtrim($path, '/');
+
+        if(!is_dir($this->path))
+            mkdir($path, 0777);
+
+        if(!is_writable($this->path))
+            chmod($this->path, 0777);
     }
 }
