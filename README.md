@@ -36,4 +36,6 @@ Thanks for using.
 
 ##License
 
-http://www.gnu.org/licenses/lgpl.html   LGPL
+![](http://i.imgur.com/8ZtPnc7.png)
+
+http://www.gnu.org/licenses/lgpl.txt
