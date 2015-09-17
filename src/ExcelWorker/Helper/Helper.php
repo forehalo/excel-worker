@@ -9,6 +9,12 @@
  */
 class Helper
 {
+    /**
+     * Get format by file extension.
+     * from laravel-excel.
+     * @param $ext
+     * @return string
+     */
     function getFormatByExtension($ext)
     {
         switch ($ext) {

@@ -40,7 +40,7 @@ class ExcelWorkerReader
      * The extension of file.
      * @var string
      */
-    protected $extension = '';
+    protected $ext = '';
 
     /**
      * Header (Always or Default the first row if specified) of file/sheet.
@@ -264,7 +264,7 @@ class ExcelWorkerReader
     protected function _init($file)
     {
         $this->_setFile($file)
-            ->setExtension()
+            ->setExt()
             ->setTitle()
             ->_setFormat()
             ->_setReader();
@@ -289,9 +289,9 @@ class ExcelWorkerReader
      * @param string $ext
      * @return $this
      */
-    public function setExtension($ext = '')
+    public function setExt($ext = '')
     {
-        $this->extension = $ext ? $ext : $this->getExt();
+        $this->ext = $ext ? $ext : $this->getExt();
         return $this;
     }
 
@@ -338,7 +338,7 @@ class ExcelWorkerReader
      */
     protected function _setFormat()
     {
-        $this->format = $this->helper->getFormatByExtension($this->extension);
+        $this->format = $this->helper->getFormatByExtension($this->ext);
         return $this;
     }
 
