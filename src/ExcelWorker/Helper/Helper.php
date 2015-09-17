@@ -1,4 +1,4 @@
-<?php namespace Helper;
+<?php namespace ExcelWorker\Helper;
 /**
  * class Helper
  * @package     forehalo/excel-worker
