@@ -13,50 +13,99 @@ use ExcelWorker\Readers\ExcelWorkerReader;
 class ExcelWorkerParser
 {
 
+    /**
+     * PHPExcel object
+     * @var \PHPExcel
+     */
     protected $excel;
 
-    private $reader;
+    /**
+     * ExcelWorkerReader object
+     * @var ExcelWorkerReader
+     */
+    protected $reader;
 
-    private $column;
+    /**
+     * Columns to be parsed.
+     * @var array
+     */
+    protected $column;
 
-    private $hasParsed = false;
+    /**
+     * Whether has been parsed.
+     * @var bool
+     */
+    protected $isParsed = false;
 
-    private $defaultStartRow = 1;
+    /**
+     * Default start row to be parsed.
+     * @var int
+     */
+    protected $defaultStartRow = 1;
 
-    private $worksheet;
+    /**
+     * The current worksheet.
+     * @var worksheet
+     */
+    protected $worksheet;
 
-    private $row;
+    /**
+     * The current row.
+     * @var Row
+     */
+    protected $row;
 
-    private $cell;
+    /**
+     * The current cell.
+     * @var Cell
+     */
+    protected $cell;
 
+    /**
+     * Constructor
+     * @param ExcelWorkerReader $reader
+     */
     public function __construct(ExcelWorkerReader $reader)
     {
         $this->reader = $reader;
         $this->excel = $this->reader->excel;
     }
 
+    /**
+     * Parse file.
+     * @param array $column
+     * @return array
+     */
     public function parseFile($column = [])
     {
         $content = [];
         $this->setSelectedColumn($column);
 
-        if (!$this->hasParsed) {
+        if (!$this->isParsed) {
             $this->worksheet = $this->excel->getWorksheetIterator()->current();
 
             $worksheet = $this->parseWorksheet(0);
             $content[0] = $worksheet;
         }
 
-        $this->hasParsed = true;
+        $this->isParsed = true;
         return $content;
     }
 
-    private function setSelectedColumn($column)
+    /**
+     * Set column to be parsed.
+     * @param $column
+     */
+    protected function setSelectedColumn($column)
     {
         $this->column = $column;
     }
 
-    private function parseWorksheet()
+    /**
+     * Parse worksheet
+     * @return array
+     */
+    protected function parseWorksheet()
     {
         $content = [];
         $rows = $this->worksheet->getRowIterator($this->getStartRow());
@@ -68,7 +117,11 @@ class ExcelWorkerParser
         return $content;
     }
 
-    private function parseRow()
+    /**
+     * Parse row
+     * @return array
+     */
+    protected function parseRow()
     {
         $content = [];
         $cells = $this->row->getCellIterator();
@@ -81,16 +134,20 @@ class ExcelWorkerParser
 
     }
 
-    private function getStartRow()
+    /**
+     * get start row.
+     * @return int
+     */
+    protected function getStartRow()
     {
         $startRow = $this->defaultStartRow;
-
-//        if($this->reader->hasHeader())
-//            $startRow++;
-//        $skip = $this->reader->getSkip();
-//        if ($skip > 0)
-//            $startRow += $skip;
-
+        /*
+        if($this->reader->hasHeader())
+            $startRow++;
+        $skip = $this->reader->getSkip();
+        if ($skip > 0)
+            $startRow += $skip;
+        */
         return $startRow;
     }
 
