@@ -7,6 +7,7 @@ use ExcelWorker\Exception\ExcelWorkerException;
 use PHPExcel_Cell;
 use PHPExcel_Cell_DefaultValueBinder;
 use PHPExcel_IOFactory;
+
 /**
  * Class ExcelWorkerReader.php
  * @package     forehalo/excel-worker
@@ -19,80 +20,78 @@ class ExcelWorkerReader
 {
     /**
      * PHPExcel object
-     *
      * @var PHPExcel
      */
     public $excel;
 
     /**
      * Excel reader object
-     *
      * @var PHPExcel_Reader_IReader
      */
     public $reader;
 
     /**
      * file name
-     *
      * @var string
      */
     protected $file = '';
 
     /**
      * The extension of file.
-     *
-     * @var string $extension
+     * @var string
      */
     protected $extension = '';
 
     /**
      * Header (Always or Default the first row if specified) of file/sheet.
-     *
-     * @var array $header
+     * @var array
      */
     protected $header = [];
 
     /**
      * The sheets selected to load.
-     *
      * @var array
      */
-    private $selectedSheets = [];
+    protected $selectedSheets = [];
 
     /**
-     * all content
-     *
+     * All parsed content.
      * @var array
      */
-    private $parsed;
+    protected $parsed;
 
     /**
-     * The path info of file.
-     *
+     * The path information of file.
      * @var array
      */
-    private $pathInfo;
+    protected $pathInfo;
 
     /**
      * Format to init IReader.
-     *
      * @var string
      */
-    private $format;
+    protected $format;
 
     /**
+     * Columns to be shown.
      * @var array
      */
-    private $column = [];
+    protected $column = [];
 
-    private $title;
+    /**
+     * Title.
+     * @var string
+     */
+    protected $title;
 
+    /**
+     * Helper object
+     * @var Helper
+     */
     protected $helper;
 
     /**
      * Constructor
-     * Load file into $content and parse the first row into $header.
-     *
      */
     public function __construct()
     {
@@ -100,11 +99,9 @@ class ExcelWorkerReader
     }
 
     /**
-     * Get all the content.
-     *
+     * Get all the content by columns given.
      * @param array
      * @return array
-     * @throws ExcelWorkerException     When nothing loaded.
      */
     public function get($column = [])
     {
@@ -113,6 +110,10 @@ class ExcelWorkerReader
         return $this->parsed;
     }
 
+    /**
+     * Get all.
+     * @return array
+     */
     public function all()
     {
         return $this->get();
@@ -120,7 +121,6 @@ class ExcelWorkerReader
 
     /**
      * Get one row by the given row number and sheetNumber.
-     *
      * @param int $row number of row
      * @param int $sheetNum index of sheet
      * @return array
@@ -128,31 +128,31 @@ class ExcelWorkerReader
      */
     public function getRow($row, $sheetNum = -1)
     {
+        //TODO
     }
 
     /**
      * Get the first row. Perhaps the second row if header exist.
-     *
-     * @throws ExcelWorkerException
+     * @throws ExcelWorkerException     When parsed is empty.
      */
     public function getFirst()
     {
+        //TODO
     }
 
     /**
      * Get one column by given column number except header.
-     *
-     * @param int $col number of column
+     * @param int $colNum number of column
      * @return array
      * @throws ExcelWorkerException     When a number given less than 1 or greater than count of column.
      */
-    public function getColumn($col)
+    public function getColumn($colNum)
     {
+        //TODO
     }
 
     /**
      * Get cell content.
-     *
      * @param $row number of row
      * @param $col number of column
      * @return string cell content
@@ -160,46 +160,47 @@ class ExcelWorkerReader
      */
     public function getCell($row, $col)
     {
+        //TODO
     }
 
     /**
      * Get the header if specified.
-     *
      * @return array
      */
     public function getHeader()
     {
+        //TODO
     }
 
     /**
      * Judge whether the given row exist in $content.
-     *
      * @param int $row number of row
      * @return bool
      */
     public function rowExist($row)
     {
+        //TODO
     }
 
     /**
      * Judge Whether the given column exist in $content.
-     *
-     * @param int $col number of column
+     * @param int $colNum number of column
      * @return bool
      */
-    public function columnExist($col)
+    public function columnExist($colNum)
     {
+        //TODO
     }
 
     /**
      * Judge Whether the Given index of a cell exist in $content.
-     *
      * @param int $row number of row
      * @param int $col number of column
      * @return bool
      */
     public function cellExist($row, $col)
     {
+        //TODO
     }
 
     /**
@@ -207,11 +208,11 @@ class ExcelWorkerReader
      */
     public function canReader()
     {
+        //TODO
     }
 
     /**
      * Get the sheets selected.
-     *
      * @return array
      */
     public function getSelectedSheets()
@@ -221,9 +222,8 @@ class ExcelWorkerReader
 
     /**
      * Set selected sheets.
-     *
      * @param array $Sheets
-    */
+     */
     public function setSelectedSheets($Sheets)
     {
         $this->selectedSheets = $Sheets;
@@ -231,7 +231,6 @@ class ExcelWorkerReader
 
     /**
      * Inject the PHPExcel into $this and reset.
-     *
      * @param PHPExcel $excel
      */
     public function injectExcel($excel)
@@ -241,13 +240,13 @@ class ExcelWorkerReader
     }
 
     /**
-     * load file
-     *
-     * @param $file
+     * Load file
+     * @param string $file
      * @return $this
      */
     public function load($file)
     {
+        //initialize
         $this->_init($file);
 
         if ($this->sheetSelected())
@@ -259,39 +258,57 @@ class ExcelWorkerReader
     }
 
     /**
-     * initialize
-     *
+     * Initialize
      * @param $file
      */
     protected function _init($file)
     {
         $this->_setFile($file)
-             ->setExtension()
-             ->setTitle()
-             ->_setFormat()
-             ->_setReader();
+            ->setExtension()
+            ->setTitle()
+            ->_setFormat()
+            ->_setReader();
     }
 
+    /**
+     * Set file name.
+     * @param string $file
+     * @return $this
+     */
     protected function _setFile($file)
     {
-        if (is_file($file)){
+        if (is_file($file)) {
             $this->file = $file;
             $this->pathInfo = pathinfo($file);
         }
         return $this;
     }
 
+    /**
+     * Set file extension.
+     * @param string $ext
+     * @return $this
+     */
     public function setExtension($ext = '')
     {
         $this->extension = $ext ? $ext : $this->getExt();
         return $this;
     }
 
-    private function getExt()
+    /**
+     * Get file extension.
+     * @return string
+     */
+    protected function getExt()
     {
         return $this->pathInfo['extension'];
     }
 
+    /**
+     * Set title
+     * @param string $title
+     * @return $this
+     */
     public function setTitle($title = '')
     {
         $this->title = $title ? $title : $this->getTitle();
@@ -299,6 +316,7 @@ class ExcelWorkerReader
     }
 
     /**
+     * Get title
      * @return string
      */
     public function getTitle()
@@ -306,17 +324,27 @@ class ExcelWorkerReader
         return $this->pathInfo['filename'];
     }
 
+    /**
+     * Use PHPExcel_IOFactory to generate reader.
+     */
     protected function _setReader()
     {
         $this->reader = PHPExcel_IOFactory::createReader($this->format);
     }
 
+    /**
+     * Set format that PHPExcel use.
+     * @return $this
+     */
     protected function _setFormat()
     {
         $this->format = $this->helper->getFormatByExtension($this->extension);
         return $this;
     }
 
+    /**
+     * Reset resource.
+     */
     protected function _reset()
     {
         $this->excel->disconnectWorksheets();
@@ -324,12 +352,19 @@ class ExcelWorkerReader
         unset($this->parse);
     }
 
-    private function resetValueBinder()
+    /**
+     * Reset ValueBinder
+     */
+    protected function resetValueBinder()
     {
         PHPExcel_Cell::setValueBinder(new PHPExcel_Cell_DefaultValueBinder());
     }
 
-    private function _parseFile($column)
+    /**
+     * Parse file
+     * @param $column
+     */
+    protected function _parseFile($column)
     {
         $column = array_merge($this->column, $column);
 
@@ -337,10 +372,12 @@ class ExcelWorkerReader
         $this->parsed = $parse->parseFile($column);
     }
 
-    private function sheetSelected()
+    /**
+     * Judge whether has sheet selected.
+     * @return bool
+     */
+    protected function sheetSelected()
     {
         return count($this->selectedSheets) > 0;
     }
-
-
 }
