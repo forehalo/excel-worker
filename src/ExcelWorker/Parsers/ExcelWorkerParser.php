@@ -1,4 +1,5 @@
 <?php namespace ExcelWorker\Parsers;
+
 use ExcelWorker\Readers\ExcelWorkerReader;
 
 /**

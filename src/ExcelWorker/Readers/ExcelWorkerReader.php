@@ -1,6 +1,6 @@
 <?php namespace ExcelWorker\Readers;
 
-use Helper\Helper;
+use ExcelWorker\Helper\Helper;
 use PHPExcel;
 use ExcelWorker\Parsers\ExcelWorkerParser;
 use ExcelWorker\Exception\ExcelWorkerException;
