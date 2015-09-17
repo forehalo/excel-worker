@@ -111,7 +111,7 @@ class ExcelWorkerWriter
 
     private function setStoragePath($path)
     {
-        $path = $path ? $path : '../../result';
+        $path = $path ? $path : '../result';
 
         $this->path = rtrim($path, '/');
 
