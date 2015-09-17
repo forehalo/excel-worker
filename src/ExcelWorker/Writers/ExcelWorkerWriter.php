@@ -1,6 +1,6 @@
 <?php namespace ExcelWorker\Writers;
 
-use helper\Helper;
+use ExcelWorker\Helper\Helper;
 use PHPExcel;
 use PHPExcel_IOFactory;
 
