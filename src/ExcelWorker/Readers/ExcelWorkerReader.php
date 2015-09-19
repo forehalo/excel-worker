@@ -358,7 +358,7 @@ class ExcelWorkerReader
     {
         $this->excel->disconnectWorksheets();
         $this->resetValueBinder();
-        unset($this->parse);
+        unset($this->parsed);
     }
 
     /**
