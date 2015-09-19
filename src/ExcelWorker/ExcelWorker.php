@@ -70,4 +70,21 @@ class ExcelWorker
 
         return $this->reader;
     }
+
+
+    public function setSelectedSheets($sheets = [])
+    {
+        $sheets = is_array($sheets) ? $sheets : func_get_args();
+        $this->reader->setSelectedSheets($sheets);
+
+        return $this;
+    }
+
+    public function setSelectedSheetsByIndex($sheets = [])
+    {
+        $sheets = is_array($sheets) ? $sheets : func_get_args();
+        $this->reader->setSelectedSheetIndices($sheets);
+
+        return $this;
+    }
 }

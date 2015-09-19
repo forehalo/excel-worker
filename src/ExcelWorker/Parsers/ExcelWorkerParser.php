@@ -80,12 +80,15 @@ class ExcelWorkerParser
     {
         $content = [];
         $this->setSelectedColumn($column);
-
         if (!$this->isParsed) {
-            $this->worksheet = $this->excel->getWorksheetIterator()->current();
-
-            $worksheet = $this->parseWorksheet(0);
-            $content[0] = $worksheet;
+            $iterator = $this->excel->getWorksheetIterator();
+            foreach ($iterator as $this->worksheet) {
+                if($this->reader->isSelected($iterator->key())){
+                    $worksheet = $this->parseWorksheet();
+                    $title = $this->worksheet->getTitle();
+                    $content[$title] = $worksheet;
+                }
+            }
         }
 
         $this->isParsed = true;
