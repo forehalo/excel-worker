@@ -1,12 +1,12 @@
 <?php namespace ExcelWorker\Readers;
 
-use ExcelWorker\Helper\Helper;
 use PHPExcel;
-use ExcelWorker\Parsers\ExcelWorkerParser;
-use ExcelWorker\Exception\ExcelWorkerException;
+use PHPExcel_IOFactory;
 use PHPExcel_Cell;
 use PHPExcel_Cell_DefaultValueBinder;
-use PHPExcel_IOFactory;
+use ExcelWorker\Exception\ExcelWorkerException;
+use ExcelWorker\Parsers\ExcelWorkerParser;
+use ExcelWorker\Helper\Helper;
 
 /**
  * Class ExcelWorkerReader.php
