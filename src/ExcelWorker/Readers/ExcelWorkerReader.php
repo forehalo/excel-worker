@@ -61,6 +61,12 @@ class ExcelWorkerReader
     protected $selectedSheets = [];
 
     /**
+     * indices of sheets selected.
+     * @var array
+     */
+    protected $selectedSheetIndices = [];
+
+    /**
      * All parsed content.
      * @var array
      */
@@ -236,6 +242,36 @@ class ExcelWorkerReader
     public function setSelectedSheets($Sheets)
     {
         $this->selectedSheets = $Sheets;
+    }
+
+    /**
+     * Set selected sheets by index
+     * @param $sheets
+     */
+    public function setSelectedSheetIndices($sheets)
+    {
+        $this->selectedSheetIndices = $sheets;
+    }
+
+    /**
+     * Get Selected sheets.
+     */
+    public function getSelectedSheetIndices()
+    {
+        return $this->selectedSheetIndices;
+    }
+
+    /**
+     * Judge whether a sheet selected.
+     * @param $sheet
+     * @return bool
+     */
+    public function isSelected($sheet)
+    {
+        $selectedSheets = $this->getSelectedSheetIndices();
+        if(empty($selectedSheets)) return true;
+
+        return in_array($sheet, $this->selectedSheets);
     }
 
     /**
