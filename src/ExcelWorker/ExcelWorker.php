@@ -79,4 +79,12 @@ class ExcelWorker
 
         return $this;
     }
+
+    public function setSelectedSheetsByIndex($sheets = [])
+    {
+        $sheets = is_array($sheets) ? $sheets : func_get_args();
+        $this->reader->setSelectedSheetIndices($sheets);
+
+        return $this;
+    }
 }
