@@ -18,7 +18,7 @@ $worker = new ExcelWorker();
 
 //Export
 $worker->create('filename')
-	   ->WriterRow([
+	   ->writerRow([
 			'a',
 			'b',
 			'c'
