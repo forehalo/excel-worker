@@ -112,7 +112,7 @@ class ExcelWorkerReader
      * Number of columns to take.
      * @var int
      */
-    protected $take;
+    protected $take = -1;
 
     /**
      * Constructor
