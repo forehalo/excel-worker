@@ -59,19 +59,24 @@ class ExcelWorker
 
     /**
      * Load a exist file.
-     * @param $file
+     * @param string $file
+     * @param bool $hasHeader
      * @return ExcelWorkerReader
      */
-    public function load($file)
+    public function load($file, $hasHeader = false)
     {
         //Inject PHPExcel object into reader
         $this->reader->injectExcel($this->excel);
-        $this->reader->load($file);
+        $this->reader->load($file, $hasHeader);
 
         return $this->reader;
     }
 
-
+    /**
+     * Set selected sheets by name.
+     * @param array $sheets
+     * @return $this
+     */
     public function setSelectedSheets($sheets = [])
     {
         $sheets = is_array($sheets) ? $sheets : func_get_args();
@@ -80,6 +85,11 @@ class ExcelWorker
         return $this;
     }
 
+    /**
+     * Set selected sheets by index.
+     * @param array $sheets
+     * @return $this
+     */
     public function setSelectedSheetsByIndex($sheets = [])
     {
         $sheets = is_array($sheets) ? $sheets : func_get_args();
