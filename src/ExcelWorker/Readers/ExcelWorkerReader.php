@@ -1,12 +1,12 @@
 <?php namespace ExcelWorker\Readers;
 
-use ExcelWorker\Helper\Helper;
 use PHPExcel;
-use ExcelWorker\Parsers\ExcelWorkerParser;
-use ExcelWorker\Exception\ExcelWorkerException;
+use PHPExcel_IOFactory;
 use PHPExcel_Cell;
 use PHPExcel_Cell_DefaultValueBinder;
-use PHPExcel_IOFactory;
+use ExcelWorker\Exception\ExcelWorkerException;
+use ExcelWorker\Parsers\ExcelWorkerParser;
+use ExcelWorker\Helper\Helper;
 
 /**
  * Class ExcelWorkerReader.php
@@ -49,10 +49,22 @@ class ExcelWorkerReader
     protected $header = [];
 
     /**
+     * Whether has a header.
+     * @var bool
+     */
+    public $hasHeader;
+
+    /**
      * The sheets selected to load.
      * @var array
      */
     protected $selectedSheets = [];
+
+    /**
+     * indices of sheets selected.
+     * @var array
+     */
+    protected $selectedSheetIndices = [];
 
     /**
      * All parsed content.
@@ -76,7 +88,7 @@ class ExcelWorkerReader
      * Columns to be shown.
      * @var array
      */
-    protected $column = [];
+    protected $columns = [];
 
     /**
      * Title.
@@ -91,6 +103,18 @@ class ExcelWorkerReader
     protected $helper;
 
     /**
+     * number of row to ignore
+     * @var int
+     */
+    protected $skip = 0;
+
+    /**
+     * Number of columns to take.
+     * @var int
+     */
+    protected $take;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -103,9 +127,9 @@ class ExcelWorkerReader
      * @param array
      * @return array
      */
-    public function get($column = [])
+    public function get($columns = [])
     {
-        $this->_parseFile($column);
+        $this->_parseFile($columns);
 
         return $this->parsed;
     }
@@ -126,9 +150,9 @@ class ExcelWorkerReader
      * @return array
      * @throws ExcelWorkerException     When a number given less than 1 or greater than count of row.
      */
-    public function getRow($row, $sheetNum = -1)
+    public function getRow($row, $sheetNum = 1)
     {
-        //TODO
+        return $this->get()[$sheetNum - 1][$row - 1];
     }
 
     /**
@@ -137,30 +161,33 @@ class ExcelWorkerReader
      */
     public function getFirst()
     {
-        //TODO
+        $row = $this->hasHeader ? 2 : 1;
+        $this->getRow($row);
     }
 
     /**
      * Get one column by given column number except header.
      * @param int $colNum number of column
+     * @param int $sheetNum number of sheet
      * @return array
      * @throws ExcelWorkerException     When a number given less than 1 or greater than count of column.
      */
-    public function getColumn($colNum)
+    public function getColumn($colNum, $sheetNum = 1)
     {
-        //TODO
+        return array_column($this->get()[$sheetNum - 1], $colNum - 1);
     }
 
     /**
      * Get cell content.
-     * @param $row number of row
-     * @param $col number of column
+     * @param int $row number of row
+     * @param int $col number of column
+     * @param int $sheetNum number of sheet
      * @return string cell content
      * @throws ExcelWorkerException     When index of cell given is invalid.
      */
-    public function getCell($row, $col)
+    public function getCell($row, $col, $sheetNum = 1)
     {
-        //TODO
+        return $this->get()[$sheetNum - 1][$row - 1][$col - 1];
     }
 
     /**
@@ -169,7 +196,7 @@ class ExcelWorkerReader
      */
     public function getHeader()
     {
-        //TODO
+        return $this->header;
     }
 
     /**
@@ -230,6 +257,36 @@ class ExcelWorkerReader
     }
 
     /**
+     * Set selected sheets by index
+     * @param $sheets
+     */
+    public function setSelectedSheetIndices($sheets)
+    {
+        $this->selectedSheetIndices = $sheets;
+    }
+
+    /**
+     * Get Selected sheets.
+     */
+    public function getSelectedSheetIndices()
+    {
+        return $this->selectedSheetIndices;
+    }
+
+    /**
+     * Judge whether a sheet selected.
+     * @param $sheet
+     * @return bool
+     */
+    public function isSelected($sheet)
+    {
+        $selectedSheets = $this->getSelectedSheetIndices();
+        if(empty($selectedSheets)) return true;
+
+        return in_array($sheet, $selectedSheets);
+    }
+
+    /**
      * Inject the PHPExcel into $this and reset.
      * @param PHPExcel $excel
      */
@@ -242,12 +299,15 @@ class ExcelWorkerReader
     /**
      * Load file
      * @param string $file
+     * @param bool $hasHeader
      * @return $this
      */
-    public function load($file)
+    public function load($file, $hasHeader)
     {
         //initialize
         $this->_init($file);
+
+        $this->hasHeader = $hasHeader;
 
         if ($this->sheetSelected())
             $this->reader->setLoadSheetsOnly($this->selectedSheets);
@@ -255,6 +315,58 @@ class ExcelWorkerReader
         $this->excel = $this->reader->load($this->file);
 
         return $this;
+    }
+
+    /**
+     * Skip $num row.
+     * @param int $num
+     * @return ExcelWorkerReader
+     */
+    public function skip($num = 0)
+    {
+        $this->skip = $num;
+        return $this;
+    }
+
+    /**
+     * Get skip.
+     * @return int
+     */
+    public function getSkip()
+    {
+        return $this->skip;
+    }
+
+    /**
+     * Set number of columns to take.
+     * @param int $take
+     * @return $this
+     */
+    public function take($take = -1)
+    {
+        $this->take = $take;
+        return $this;
+    }
+
+    /**
+     * Get take.
+     * @return int
+     */
+    public function getTake()
+    {
+        return $this->take;
+    }
+
+    /**
+     * Set limit(skip and number to take)
+     * @param $skip
+     * @param $take
+     * @return ExcelWorkerReader
+     */
+    public function limit($skip, $take)
+    {
+        $this->skip($skip);
+        return $this->take($take);
     }
 
     /**
@@ -349,7 +461,7 @@ class ExcelWorkerReader
     {
         $this->excel->disconnectWorksheets();
         $this->resetValueBinder();
-        unset($this->parse);
+        unset($this->parsed);
     }
 
     /**
@@ -362,14 +474,14 @@ class ExcelWorkerReader
 
     /**
      * Parse file
-     * @param $column
+     * @param $columns
      */
-    protected function _parseFile($column)
+    protected function _parseFile($columns)
     {
-        $column = array_merge($this->column, $column);
+        $columns = array_merge($this->columns, $columns);
 
         $parse = new ExcelWorkerParser($this);
-        $this->parsed = $parse->parseFile($column);
+        $this->parsed = $parse->parseFile($columns);
     }
 
     /**

@@ -29,7 +29,7 @@ class ExcelWorkerParser
      * Columns to be parsed.
      * @var array
      */
-    protected $column;
+    protected $columns;
 
     /**
      * Whether has been parsed.
@@ -62,6 +62,12 @@ class ExcelWorkerParser
     protected $cell;
 
     /**
+     * header
+     * @var array
+     */
+    protected $header = [];
+
+    /**
      * Constructor
      * @param ExcelWorkerReader $reader
      */
@@ -73,32 +79,31 @@ class ExcelWorkerParser
 
     /**
      * Parse file.
-     * @param array $column
+     * @param array $columns
      * @return array
      */
-    public function parseFile($column = [])
+    public function parseFile($columns = [])
     {
         $content = [];
-        $this->setSelectedColumn($column);
-
+        $this->setSelectedColumn($columns);
         if (!$this->isParsed) {
-            $this->worksheet = $this->excel->getWorksheetIterator()->current();
+            $iterator = $this->excel->getWorksheetIterator();
 
-            $worksheet = $this->parseWorksheet(0);
-            $content[0] = $worksheet;
+            foreach ($iterator as $this->worksheet) {
+
+                if ($this->reader->isSelected($iterator->key())) {
+
+                    $worksheet = $this->parseWorksheet();
+                    if (!empty($worksheet)) {
+                        $title = $this->worksheet->getTitle();
+                        $content[$title] = $worksheet;
+                    }
+                }
+            }
         }
 
         $this->isParsed = true;
         return $content;
-    }
-
-    /**
-     * Set column to be parsed.
-     * @param $column
-     */
-    protected function setSelectedColumn($column)
-    {
-        $this->column = $column;
     }
 
     /**
@@ -108,10 +113,17 @@ class ExcelWorkerParser
     protected function parseWorksheet()
     {
         $content = [];
+
         $rows = $this->worksheet->getRowIterator($this->getStartRow());
         $i = 0;
+        $take = $this->reader->getTake();
         foreach ($rows as $this->row) {
-            $content[$i] = $this->parseRow();
+            if($i >= $take && $take !== -1)
+                break;
+
+            $parsed = $this->parseRow();
+            if (!empty($parsed))
+                $content[$i] = $parsed;
             $i++;
         }
         return $content;
@@ -124,14 +136,55 @@ class ExcelWorkerParser
     protected function parseRow()
     {
         $content = [];
+        if ($this->reader->hasHeader) {
+            $this->initHeader();
+        }
         $cells = $this->row->getCellIterator();
         $i = 0;
         foreach ($cells as $this->cell) {
-            $content[$i] = $this->cell->getValue();
+            $header = $this->reader->hasHeader ? $this->header[$i] : $i;
+            if ($this->needParsed($header)) {
+                $content[$header] = $this->cell->getValue();
+            }
             $i++;
         }
         return $content;
 
+    }
+
+    protected function initHeader()
+    {
+        $row = $this->worksheet->getRowIterator(1)->current();
+        $header = [];
+        foreach ($row->getCellIterator() as $item) {
+            $header[] = $item->getValue();
+        }
+        $this->header = $header;
+    }
+
+    protected function needParsed($index)
+    {
+        if (empty($this->columns))
+            return true;
+        return in_array($index, $this->getSelectedColumns(), true);
+    }
+
+    /**
+     * Set columns to be parsed.
+     * @param array $columns
+     */
+    protected function setSelectedColumn($columns)
+    {
+        $this->columns = $columns;
+    }
+
+    /**
+     * Get selected columns
+     * @return array
+     */
+    protected function getSelectedColumns()
+    {
+        return $this->columns;
     }
 
     /**
@@ -141,13 +194,14 @@ class ExcelWorkerParser
     protected function getStartRow()
     {
         $startRow = $this->defaultStartRow;
-        /*
-        if($this->reader->hasHeader())
+
+        if ($this->reader->hasHeader)
             $startRow++;
+
         $skip = $this->reader->getSkip();
+
         if ($skip > 0)
             $startRow += $skip;
-        */
         return $startRow;
     }
 
