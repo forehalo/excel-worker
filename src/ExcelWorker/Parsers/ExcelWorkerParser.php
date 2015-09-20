@@ -116,7 +116,11 @@ class ExcelWorkerParser
 
         $rows = $this->worksheet->getRowIterator($this->getStartRow());
         $i = 0;
+        $take = $this->reader->getTake();
         foreach ($rows as $this->row) {
+            if($i >= $take && $take !== -1)
+                break;
+
             $parsed = $this->parseRow();
             if (!empty($parsed))
                 $content[$i] = $parsed;
@@ -190,12 +194,14 @@ class ExcelWorkerParser
     protected function getStartRow()
     {
         $startRow = $this->defaultStartRow;
+
         if ($this->reader->hasHeader)
             $startRow++;
-//
-//        $skip = $this->reader->getSkip();
-//        if ($skip > 0)
-//            $startRow += $skip;
+
+        $skip = $this->reader->getSkip();
+
+        if ($skip > 0)
+            $startRow += $skip;
         return $startRow;
     }
 
