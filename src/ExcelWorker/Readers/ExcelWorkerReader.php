@@ -52,7 +52,7 @@ class ExcelWorkerReader
      * Whether has a header.
      * @var bool
      */
-    protected $hasHeader = true;
+    public $hasHeader;
 
     /**
      * The sheets selected to load.
@@ -88,7 +88,7 @@ class ExcelWorkerReader
      * Columns to be shown.
      * @var array
      */
-    protected $column = [];
+    protected $columns = [];
 
     /**
      * Title.
@@ -103,6 +103,18 @@ class ExcelWorkerReader
     protected $helper;
 
     /**
+     * number of row to ignore
+     * @var int
+     */
+    protected $skip = 0;
+
+    /**
+     * Number of columns to take.
+     * @var int
+     */
+    protected $take;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -115,9 +127,9 @@ class ExcelWorkerReader
      * @param array
      * @return array
      */
-    public function get($column = [])
+    public function get($columns = [])
     {
-        $this->_parseFile($column);
+        $this->_parseFile($columns);
 
         return $this->parsed;
     }
@@ -271,7 +283,7 @@ class ExcelWorkerReader
         $selectedSheets = $this->getSelectedSheetIndices();
         if(empty($selectedSheets)) return true;
 
-        return in_array($sheet, $this->selectedSheets);
+        return in_array($sheet, $selectedSheets);
     }
 
     /**
@@ -287,12 +299,15 @@ class ExcelWorkerReader
     /**
      * Load file
      * @param string $file
+     * @param bool $hasHeader
      * @return $this
      */
-    public function load($file)
+    public function load($file, $hasHeader)
     {
         //initialize
         $this->_init($file);
+
+        $this->hasHeader = $hasHeader;
 
         if ($this->sheetSelected())
             $this->reader->setLoadSheetsOnly($this->selectedSheets);
@@ -300,6 +315,58 @@ class ExcelWorkerReader
         $this->excel = $this->reader->load($this->file);
 
         return $this;
+    }
+
+    /**
+     * Skip $num row.
+     * @param int $num
+     * @return ExcelWorkerReader
+     */
+    public function skip($num = 0)
+    {
+        $this->skip = $num;
+        return $this;
+    }
+
+    /**
+     * Get skip.
+     * @return int
+     */
+    public function getSkip()
+    {
+        return $this->skip;
+    }
+
+    /**
+     * Set number of columns to take.
+     * @param int $take
+     * @return $this
+     */
+    public function take($take = -1)
+    {
+        $this->take = $take;
+        return $this;
+    }
+
+    /**
+     * Get take.
+     * @return int
+     */
+    public function getTake()
+    {
+        return $this->take;
+    }
+
+    /**
+     * Set limit(skip and number to take)
+     * @param $skip
+     * @param $take
+     * @return ExcelWorkerReader
+     */
+    public function limit($skip, $take)
+    {
+        $this->skip($skip);
+        return $this->take($take);
     }
 
     /**
@@ -407,14 +474,14 @@ class ExcelWorkerReader
 
     /**
      * Parse file
-     * @param $column
+     * @param $columns
      */
-    protected function _parseFile($column)
+    protected function _parseFile($columns)
     {
-        $column = array_merge($this->column, $column);
+        $columns = array_merge($this->columns, $columns);
 
         $parse = new ExcelWorkerParser($this);
-        $this->parsed = $parse->parseFile($column);
+        $this->parsed = $parse->parseFile($columns);
     }
 
     /**
