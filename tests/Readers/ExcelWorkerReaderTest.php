@@ -1,19 +1,20 @@
 <?php
 
 use ExcelWorker\ExcelWorker;
-use ExcelWorker\Readers\ExcelWorkerReader;
 
 class ExcelWorkerReaderTest extends PHPUnit_Framework_TestCase
 {
-    public $reader;
-
-    public $worker;
-
     public function setup()
     {
         $this->worker = new ExcelWorker();
         $this->reader = $this->worker->load(__DIR__ . '/files/test.xlsx', true);
         $this->assertInstanceOf('ExcelWorker\Readers\ExcelWorkerReader', $this->reader);
+    }
+
+    public function testHeader()
+    {
+        $expected = ['h1', 'h2', 'h3', 'h4'];
+        $this->assertEquals($expected, array_keys($this->reader->get()['Sheet1'][0]));
     }
 
     public function testGet()
@@ -93,5 +94,25 @@ class ExcelWorkerReaderTest extends PHPUnit_Framework_TestCase
             ]
         ];
         $this->assertEquals($expected, $this->reader->limit(1, 1)->get());
+    }
+
+    public function testSetColumns()
+    {
+        $expected = [
+            'Sheet1' => [
+                [
+                    'h2' => 2,
+                    'h3' => 3,
+                    'h4' => 4
+                ],
+                [
+                    'h2' => 6,
+                    'h3' => 7,
+                    'h4' => 8
+                ]
+            ]
+        ];
+        $this->assertEquals($expected, $this->reader->limit(-1, 2)->get(['h2', 'h3', 'h4']));
+        $this->assertEquals($expected, $this->reader->limit(-1, 2)->get([1, 2, 3]));
     }
 }
