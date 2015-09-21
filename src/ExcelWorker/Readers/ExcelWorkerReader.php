@@ -112,7 +112,7 @@ class ExcelWorkerReader
      * Number of columns to take.
      * @var int
      */
-    protected $take;
+    protected $take = -1;
 
     /**
      * Constructor
@@ -250,19 +250,23 @@ class ExcelWorkerReader
     /**
      * Set selected sheets.
      * @param array $Sheets
+     * @return ExcelWorkerReader
      */
     public function setSelectedSheets($Sheets)
     {
         $this->selectedSheets = $Sheets;
+        return $this;
     }
 
     /**
      * Set selected sheets by index
      * @param $sheets
+     * @return ExcelWorkerReader
      */
     public function setSelectedSheetIndices($sheets)
     {
         $this->selectedSheetIndices = $sheets;
+        return $this;
     }
 
     /**
