@@ -143,7 +143,7 @@ class ExcelWorkerParser
         $i = 0;
         foreach ($cells as $this->cell) {
             $header = $this->reader->hasHeader ? $this->header[$i] : $i;
-            if ($this->needParsed($header)) {
+            if ($this->needParsed($header, $i)) {
                 $content[$header] = $this->cell->getValue();
             }
             $i++;
@@ -162,11 +162,11 @@ class ExcelWorkerParser
         $this->header = $header;
     }
 
-    protected function needParsed($index)
+    protected function needParsed($index, $i)
     {
         if (empty($this->columns))
             return true;
-        return in_array($index, $this->getSelectedColumns(), true);
+        return in_array($index, $this->getSelectedColumns(), true) || in_array($i, $this->getSelectedColumns(), true);
     }
 
     /**
