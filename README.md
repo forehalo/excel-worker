@@ -57,7 +57,7 @@ $worker->create('filename')
 		])->save('xlsx');  //you may use ->save('xlsx', 'path') to specify the storage path.
 
 //Import
-//The second parameter is a bool value to tell whether has a header(probably the first row), default is false.
+//The second parameter is a bool value to tell whether header exists(probably the first row), default is false.
 $worker->load('./path/filename.xlsx', true)->get();
 
 //The load() method returns a reader object, so you could use as:
