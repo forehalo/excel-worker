@@ -166,6 +166,15 @@ class ExcelWorkerReader
     }
 
     /**
+     * Set header.
+     * @param string $header
+     */
+    public function setHeader($header)
+    {
+        $this->header = $header;
+    }
+
+    /**
      * Get the header if specified.
      * @return array
      */
