@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Excel-worker by forehalo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Excel-worker</h1>
+      <h2 class="project-tagline">A simple library to work with excels based on PHPExcel.</h2>
+      <a href="https://github.com/forehalo/excel-worker" class="btn">View on GitHub</a>
+      <a href="https://github.com/forehalo/excel-worker/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/forehalo/excel-worker/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="excel-wroker-v20" class="anchor" href="#excel-wroker-v20" aria-hidden="true"><span class="octicon octicon-link"></span></a>Excel-Wroker V2.0</h1>
+
+<p>a simple library to work with excels based on PHPExcel.</p>
+
+<h2>
+<a id="feature" class="anchor" href="#feature" aria-hidden="true"><span class="octicon octicon-link"></span></a>Feature</h2>
+
+<ul>
+<li>muti-workesheets, possible:</li>
+</ul>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$worker</span><span class="pl-k">-&gt;</span>setSelectedSheets([<span class="pl-s"><span class="pl-pds">'</span>Sheet1<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Sheet2<span class="pl-pds">'</span></span>])<span class="pl-k">-&gt;</span>load(<span class="pl-s"><span class="pl-pds">'</span>filename<span class="pl-pds">'</span></span>)<span class="pl-k">-&gt;</span>get();</span></pre></div>
+
+<ul>
+<li>specify columns, possible: </li>
+</ul>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$worker</span><span class="pl-k">-&gt;</span>load(<span class="pl-s"><span class="pl-pds">'</span>filename<span class="pl-pds">'</span></span>, <span class="pl-c1">true</span>)<span class="pl-k">-&gt;</span>get([<span class="pl-s"><span class="pl-pds">'</span>col1<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>col2<span class="pl-pds">'</span></span>]);</span>
+<span class="pl-s1"><span class="pl-smi">$worker</span><span class="pl-k">-&gt;</span>load(<span class="pl-s"><span class="pl-pds">'</span>filename<span class="pl-pds">'</span></span>)<span class="pl-k">-&gt;</span>get([<span class="pl-c1">0</span>, <span class="pl-c1">1</span>, <span class="pl-c1">2</span>]);</span></pre></div>
+
+<ul>
+<li>limit start and end row, possible:</li>
+</ul>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-c">//skip the first 5 rows.</span></span>
+<span class="pl-s1"><span class="pl-smi">$reader</span><span class="pl-k">-&gt;</span>skip(<span class="pl-c1">5</span>)<span class="pl-k">-&gt;</span>get();</span>
+<span class="pl-s1"><span class="pl-c">//only fetch 6 rows</span></span>
+<span class="pl-s1"><span class="pl-smi">$reader</span><span class="pl-k">-&gt;</span>take(<span class="pl-c1">6</span>)<span class="pl-k">-&gt;</span>get();</span>
+<span class="pl-s1"><span class="pl-c">//skip the first 7 rows and fetch the following 8 rows</span></span>
+<span class="pl-s1"><span class="pl-smi">$reader</span><span class="pl-k">-&gt;</span>skip(<span class="pl-c1">7</span>)<span class="pl-k">-&gt;</span>take(<span class="pl-c1">8</span>)<span class="pl-k">-&gt;</span>get();</span>
+<span class="pl-s1"><span class="pl-c">//or</span></span>
+<span class="pl-s1"><span class="pl-smi">$reader</span><span class="pl-k">-&gt;</span>limit(<span class="pl-c1">7</span>, <span class="pl-c1">8</span>)<span class="pl-k">-&gt;</span>get();</span>
+<span class="pl-s1"><span class="pl-c">//attention</span></span>
+<span class="pl-s1"><span class="pl-smi">$reader</span><span class="pl-k">-&gt;</span>limit(<span class="pl-k">-</span><span class="pl-c1">1</span>, <span class="pl-c1">8</span>) <span class="pl-c">// no skip</span></span>
+<span class="pl-s1"><span class="pl-smi">$reader</span><span class="pl-k">-&gt;</span>limit(<span class="pl-c1">7</span>, <span class="pl-k">-</span><span class="pl-c1">1</span>) <span class="pl-c">// no take</span></span></pre></div>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>require this package in your <code>composer.json</code> and update composer. It will also download PHPExcel for you.</p>
+
+<pre><code>"forehalo/excel-worker":"2.0.*"
+</code></pre>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Before usage you should include <code>vendor/autoload.php</code> into your file.</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">ExcelWorker\ExcelWorker</span>;</span>
+<span class="pl-s1"><span class="pl-smi">$worker</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">ExcelWorker</span>();</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">//Export</span></span>
+<span class="pl-s1"><span class="pl-smi">$worker</span><span class="pl-k">-&gt;</span>create(<span class="pl-s"><span class="pl-pds">'</span>filename<span class="pl-pds">'</span></span>)</span>
+<span class="pl-s1">       <span class="pl-k">-&gt;</span>writerRow([</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>b<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>c<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">        ])<span class="pl-k">-&gt;</span>save(<span class="pl-s"><span class="pl-pds">'</span>xlsx<span class="pl-pds">'</span></span>);  <span class="pl-c">//you may use -&gt;save('xlsx', 'path') to specify the storage path.</span></span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">//Import</span></span>
+<span class="pl-s1"><span class="pl-c">//The second parameter is a bool value to tell whether has a header(probably the first row), default is false.</span></span>
+<span class="pl-s1"><span class="pl-smi">$worker</span><span class="pl-k">-&gt;</span>load(<span class="pl-s"><span class="pl-pds">'</span>./path/filename.xlsx<span class="pl-pds">'</span></span>, <span class="pl-c1">true</span>)<span class="pl-k">-&gt;</span>get();</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">//The load() method returns a reader object, so you could use as:</span></span>
+<span class="pl-s1"><span class="pl-smi">$reader</span> <span class="pl-k">=</span> <span class="pl-smi">$worker</span><span class="pl-k">-&gt;</span>load(<span class="pl-s"><span class="pl-pds">'</span>filename<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1"><span class="pl-smi">$reader</span><span class="pl-k">-&gt;</span>get();</span></pre></div>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p><img src="http://i.imgur.com/8ZtPnc7.png" alt=""></p>
+
+<p><a href="http://www.gnu.org/licenses/lgpl.txt">http://www.gnu.org/licenses/lgpl.txt</a></p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/forehalo/excel-worker">Excel-worker</a> is maintained by <a href="https://github.com/forehalo">forehalo</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
