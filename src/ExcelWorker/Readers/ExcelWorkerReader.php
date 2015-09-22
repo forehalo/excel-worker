@@ -152,7 +152,7 @@ class ExcelWorkerReader
      */
     public function getRow($row, $sheetNum = 1)
     {
-        return $this->get()[$sheetNum - 1][$row - 1];
+        return $this->parsed[$sheetNum - 1][$row - 1];
     }
 
     /**
@@ -166,76 +166,12 @@ class ExcelWorkerReader
     }
 
     /**
-     * Get one column by given column number except header.
-     * @param int $colNum number of column
-     * @param int $sheetNum number of sheet
-     * @return array
-     * @throws ExcelWorkerException     When a number given less than 1 or greater than count of column.
-     */
-    public function getColumn($colNum, $sheetNum = 1)
-    {
-        return array_column($this->get()[$sheetNum - 1], $colNum - 1);
-    }
-
-    /**
-     * Get cell content.
-     * @param int $row number of row
-     * @param int $col number of column
-     * @param int $sheetNum number of sheet
-     * @return string cell content
-     * @throws ExcelWorkerException     When index of cell given is invalid.
-     */
-    public function getCell($row, $col, $sheetNum = 1)
-    {
-        return $this->get()[$sheetNum - 1][$row - 1][$col - 1];
-    }
-
-    /**
      * Get the header if specified.
      * @return array
      */
     public function getHeader()
     {
         return $this->header;
-    }
-
-    /**
-     * Judge whether the given row exist in $content.
-     * @param int $row number of row
-     * @return bool
-     */
-    public function rowExist($row)
-    {
-        //TODO
-    }
-
-    /**
-     * Judge Whether the given column exist in $content.
-     * @param int $colNum number of column
-     * @return bool
-     */
-    public function columnExist($colNum)
-    {
-        //TODO
-    }
-
-    /**
-     * Judge Whether the Given index of a cell exist in $content.
-     * @param int $row number of row
-     * @param int $col number of column
-     * @return bool
-     */
-    public function cellExist($row, $col)
-    {
-        //TODO
-    }
-
-    /**
-     * Can the file be read.
-     */
-    public function canReader()
-    {
-        //TODO
     }
 
     /**
