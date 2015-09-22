@@ -160,6 +160,7 @@ class ExcelWorkerParser
             $header[] = $item->getValue();
         }
         $this->header = $header;
+        $this->reader->setHeader($this->header);
     }
 
     protected function needParsed($index, $i)

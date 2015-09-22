@@ -28,6 +28,7 @@ $reader->take(6)->get();
 $reader->skip(7)->take(8)->get();
 //or
 $reader->limit(7, 8)->get();
+
 //attention
 $reader->limit(-1, 8) // no skip
 $reader->limit(7, -1) // no take
@@ -49,19 +50,18 @@ use ExcelWorker\ExcelWorker;
 $worker = new ExcelWorker();
 
 //Export
-$worker->create('filename')
-	   ->writerRow([
-			'a',
-			'b',
-			'c'
-		])->save('xlsx');  //you may use ->save('xlsx', 'path') to specify the storage path.
+$rowNum = 2;
+$writer = $worker->create('file'); //create() will return a Writer instance
+$writer->writerRow(['a', 'b', 'c'], $rowNum);
+$writer->writeColumn(['a', 'b', 'c'], $col); //both $col = 50 or $col = 'AX' could be accpeted.
+$writer->save('xlsx');  //you may use ->save('xlsx', 'path') to specify the storage path.
 
 //Import
 //The second parameter is a bool value to tell whether header exists(probably the first row), default is false.
 $worker->load('./path/filename.xlsx', true)->get();
 
-//The load() method returns a reader object, so you could use as:
-$reader = $worker->load('filename');
+//The load() method returns a Reader instance, so you could use as:
+$reader = $worker->load('filename.xlsx');
 $reader->get();
 ```
 
