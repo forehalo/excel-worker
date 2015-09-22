@@ -210,7 +210,7 @@ class ExcelWorkerWriter
      * @param $column
      * @return string
      */
-    protected function getColumn($column)
+    public function getColumn($column)
     {
         $n = $column;
         $ret = '';
@@ -218,6 +218,6 @@ class ExcelWorkerWriter
             $ret = chr(($n - 1) % 26 + 65) . $ret;
             $n = floor(($n - 1) / 26);
         }
-        return $n;
+        return $ret;
     }
 }
