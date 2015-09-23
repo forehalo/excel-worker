@@ -98,21 +98,19 @@ class ExcelWorkerReaderTest extends PHPUnit_Framework_TestCase
 
     public function testSetColumns()
     {
-        $expected = [
+        $expected1 = [
             'Sheet1' => [
-                [
-                    'h2' => 2,
-                    'h3' => 3,
-                    'h4' => 4
-                ],
-                [
-                    'h2' => 6,
-                    'h3' => 7,
-                    'h4' => 8
-                ]
+                ['h2' => 2, 'h3' => 3, 'h4' => 4],
+                ['h2' => 6, 'h3' => 7, 'h4' => 8]
             ]
         ];
-        $this->assertEquals($expected, $this->reader->limit(-1, 2)->get(['h2', 'h3', 'h4']));
-        $this->assertEquals($expected, $this->reader->limit(-1, 2)->get([1, 2, 3]));
+        $expected2 = [
+            'Sheet1' => [
+                ['h3' => 3, 'h4' => 4],
+                ['h3' => 7, 'h4' => 8]
+            ]
+        ];
+        $this->assertEquals($expected1, $this->reader->limit(-1, 2)->get(['h2', 'h3', 'h4']));
+        $this->assertEquals($expected2, $this->reader->limit(-1, 2)->get([2, 3]));
     }
 }
