@@ -150,9 +150,8 @@ class ExcelWorkerReader
      * @return array
      * @throws ExcelWorkerException     When a number given less than 1 or greater than count of row.
      */
-    public function getRow($row, $sheetNum = 1)
+    public function getRow($row)
     {
-        return $this->parsed[$sheetNum - 1][$row - 1];
     }
 
     /**
@@ -268,12 +267,12 @@ class ExcelWorkerReader
 
     /**
      * Skip $num row.
-     * @param int $num
+     * @param int $skip
      * @return ExcelWorkerReader
      */
-    public function skip($num = 0)
+    public function skip($skip = 0)
     {
-        $this->skip = $num;
+        $this->skip = $skip;
         return $this;
     }
 
@@ -312,7 +311,7 @@ class ExcelWorkerReader
      * @param $take
      * @return ExcelWorkerReader
      */
-    public function limit($skip, $take)
+    public function limit($skip = 0, $take = -1)
     {
         $this->skip($skip);
         return $this->take($take);
